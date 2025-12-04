@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление книги</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>📖 Добавление новой книги</h2>
+
+        <form action="{{ url_for('add_book') }}" method="POST">
+            <label for="title">Название книги:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="author">Автор:</label>
+            <input type="text" id="author" name="author" required>
+
+            <label for="category">Категория:</label>
+            <select id="category" name="category" required>
+                <option value="">Выберите категорию</option>
+                <option value="Учёба">Учёба</option>
+                <option value="Детские">Детские</option>
+                <option value="Художественные">Художественные</option>
+                <option value="Психология">Психология</option>
+                <option value="Познавательные">Познавательные</option>
+                <option value="Хобби">Хобби</option>
+                <option value="Манга">Манга</option>
+                <option value="Манхва">Манхва</option>
+                <option value="Маньхуа">Маньхуа</option>
+                <option value="Комиксы">Комиксы</option>
+                <option value="Другое">Другое</option>
+            </select>
+
+            <label for="genre">Жанр (если помните):</label>
+            <input type="text" id="genre" name="genre" placeholder="Например: Фантастика">
+
+            <label for="year">Год издания:</label>
+            <input type="number" id="year" name="year" min="1000" max="9999">
+
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" rows="4"></textarea>
+
+            <input type="submit" value="Добавить книгу">
+        </form>
+
+        <a href="{{ url_for('index') }}" class="back-link">← Назад к библиотеке</a>
+    </div>
+</body>
+</html>
