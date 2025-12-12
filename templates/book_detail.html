@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }} - Детали</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='book_detail.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Кнопка назад -->
+        <a href="{{ url_for('index') }}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Назад к библиотеке
+        </a>
+
+        <!-- Основная информация о книге -->
+        <div class="book-detail-card">
+            <!-- Обложка -->
+            <div class="detail-cover">
+                {% if book['cover'] %}
+                    <img src="{{ book['cover'] }}" alt="{{ book['title'] }}" class="detail-image">
+                {% else %}
+                    <div class="detail-placeholder">
+                        <i class="fas fa-book"></i>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Информация -->
+            <div class="detail-info">
+                <h1 class="detail-title">{{ book.title }}</h1>
+                <h2 class="detail-author">{{ book.author }}</h2>
+
+                <div class="detail-meta">
+                    {% if book.year %}
+                    <div class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <strong>Год:</strong> {{ book.year }}
+                    </div>
+                    {% endif %}
+
+                    <div class="meta-item">
+                        <i class="fas fa-tags"></i>
+                        <strong>Категория:</strong>
+                        <span class="detail-category">{{ book.category }}</span>
+                    </div>
+
+                    {% if book.genre %}
+                    <div class="meta-item">
+                        <i class="fas fa-theater-masks"></i>
+                        <strong>Жанр:</strong> {{ book.genre }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Описание -->
+                {% if book.description %}
+                <div class="detail-description">
+                    <h3><i class="fas fa-align-left"></i> Описание:</h3>
+                    <p>{{ book.description }}</p>
+                </div>
+                {% else %}
+                <div class="detail-description">
+                    <h3><i class="fas fa-align-left"></i> Описание:</h3>
+                    <p style="color: #888; font-style: italic;">Описание отсутствует</p>
+                </div>
+                {% endif %}
+
+                <!-- Кнопки действий -->
+                <div class="detail-actions">
+                    <button class="btn-edit" onclick="location.href='/book/{{ book.id }}/edit'">
+                        <i class="fas fa-edit"></i> Редактировать
+                    </button>
+                    <button class="btn-delete" onclick="if(confirm('Удалить эту книгу?')) location.href='/book/{{ book.id }}/delete'">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

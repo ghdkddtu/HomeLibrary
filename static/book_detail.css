@@ -1,0 +1,170 @@
+.book-detail-card {
+    background: linear-gradient(145deg, var(--medium-brown), var(--light-brown));
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    gap: 40px;
+    border: 2px solid var(--light-brown);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.detail-cover {
+    flex: 0 0 300px;
+}
+
+.detail-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid var(--gold);
+}
+
+.detail-placeholder {
+    width: 100%;
+    height: 400px;
+    background: var(--dark-brown);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 100px;
+    border: 3px dashed var(--light-brown);
+}
+
+.detail-info {
+    flex: 1;
+}
+
+.detail-title {
+    color: var(--gold);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.detail-author {
+    color: var(--cream);
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.detail-meta {
+    background: rgba(45, 35, 28, 0.7);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.meta-item {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: var(--cream);
+}
+
+.meta-item i {
+    color: var(--gold);
+    margin-right: 10px;
+    width: 20px;
+}
+
+.detail-category {
+    background: var(--burgundy);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+.detail-description {
+    background: rgba(61, 48, 40, 0.9);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.detail-description h3 {
+    color: var(--gold);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.detail-description p {
+    color: var(--cream);
+    line-height: 1.7;
+    font-size: 1.1rem;
+}
+
+/* Кнопки на детальной странице */
+.detail-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.btn-edit {
+    background: var(--light-brown);
+    color: var(--cream);
+}
+
+.btn-edit:hover {
+    background: var(--medium-brown);
+    transform: translateY(-3px);
+}
+
+.btn-delete {
+    background: #8b0000;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #a52a2a;
+    transform: translateY(-3px);
+}
+
+/* Кнопка назад */
+.back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    background: var(--gold);
+    color: var(--dark-brown);
+
+}
+
+/* Убираем подчёркивание у ссылок-карточек */
+.book-card {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+
+/* Убираем стандартное оформление ссылок */
+a {
+    text-decoration: none;
+    color: inherit;
+}

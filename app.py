@@ -64,6 +64,80 @@ def add_book():
     return render_template('add_book.html')
 
 
+@app.route('/book/<int:book_id>')
+def book_detail(book_id):
+    conn = get_db_connection()
+    book = conn.execute('SELECT * FROM books WHERE id = ?', (book_id,)).fetchone()
+    conn.close()
+
+    if not book:
+        return "Книга не найдена", 404
+
+    return render_template('book_detail.html', book=book)
+
+
+
+@app.route('/book/<int:book_id>/edit')
+def edit_book(book_id):
+    conn = get_db_connection()
+    book = conn.execute('SELECT * FROM books WHERE id = ?', (book_id,)).fetchone()
+    conn.close()
+
+    if not book:
+        return "Книга не найдена", 404
+
+    return render_template('edit_book.html', book=book)
+
+
+@app.route('/book/<int:book_id>/update', methods=['POST'])
+def update_book(book_id):
+    # Получаем данные из формы
+    title = request.form['title']
+    author = request.form['author']
+    category = request.form['category']
+    genre = request.form.get('genre', '')
+    year = request.form.get('year', '')
+    cover = request.form.get('cover', '')
+    description = request.form.get('description', '')
+
+    # Обновляем книгу в базе данных
+    conn = get_db_connection()
+
+    try:
+        conn.execute('''
+            UPDATE books 
+            SET title = ?, author = ?, category = ?, genre = ?, 
+                year = ?, cover = ?, description = ?
+            WHERE id = ?
+        ''', (title, author, category, genre, year, cover, description, book_id))
+
+        conn.commit()
+        conn.close()
+
+
+        return redirect(url_for('book_detail', book_id=book_id))
+
+    except Exception as e:
+        conn.close()
+        return f"Ошибка при обновлении: {str(e)}", 500
+
+
+@app.route('/book/<int:book_id>/delete')
+def delete_book(book_id):
+    conn = get_db_connection()
+
+    try:
+        conn.execute('DELETE FROM books WHERE id = ?', (book_id,))
+        conn.commit()
+        conn.close()
+
+        # Возвращаем на главную страницу
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        conn.close()
+        return f"Ошибка при удалении: {str(e)}", 500
+
 if __name__ == '__main__':
     #update_categories()
     app.run(debug=True)

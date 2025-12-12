@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать книгу</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='edit_book.css') }}">
+</head>
+<body>
+    <div class="container edit-page">
+        <a href="{{ url_for('book_detail', book_id=book.id) }}" class="back-btn">
+            ← Назад
+        </a>
+
+        <h1 class="edit-title"> Редактировать книгу</h1>
+
+        <div class="edit-form-container">
+            <form action="{{ url_for('update_book', book_id=book.id) }}" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Название книги</label>
+                        <input type="text" name="title" value="{{ book.title }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Автор</label>
+                        <input type="text" name="author" value="{{ book.author }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Категория</label>
+                        <select name="category" required>
+                            <option value="Учёба" {% if book.category == 'Учёба' %}selected{% endif %}>Учёба</option>
+                            <option value="Детские" {% if book.category == 'Детские' %}selected{% endif %}>Детские</option>
+                            <option value="Художественные" {% if book.category == 'Художественные' %}selected{% endif %}>Художественные</option>
+                            <option value="Психология" {% if book.category == 'Психология' %}selected{% endif %}>Психология</option>
+                            <option value="Познавательные" {% if book.category == 'Познавательные' %}selected{% endif %}>Познавательные</option>
+                            <option value="Хобби" {% if book.category == 'Хобби' %}selected{% endif %}>Хобби</option>
+                            <option value="Манга" {% if book.category == 'Манга' %}selected{% endif %}>Манга</option>
+                            <option value="Манхва" {% if book.category == 'Манхва' %}selected{% endif %}>Манхва</option>
+                            <option value="Маньхуа" {% if book.category == 'Маньхуа' %}selected{% endif %}>Маньхуа</option>
+                            <option value="Комиксы" {% if book.category == 'Комиксы' %}selected{% endif %}>Комиксы</option>
+                            <option value="Другое" {% if book.category == 'Другое' %}selected{% endif %}>Другое</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Жанр</label>
+                        <input type="text" name="genre" value="{{ book.genre or '' }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Год издания</label>
+                        <input type="number" name="year" value="{{ book.year or '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Обложка (URL)</label>
+                        <input type="text" name="cover" value="{{ book.cover or '' }}">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Описание</label>
+                    <textarea name="description" rows="5">{{ book.description or '' }}</textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-save">Сохранить изменения</button>
+                    <a href="{{ url_for('book_detail', book_id=book.id) }}" class="btn-cancel">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

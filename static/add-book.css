@@ -1,0 +1,177 @@
+body {
+    background: linear-gradient(135deg, #3c2a1e 0%, #2c1c13 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #f0e6d2;
+}
+
+.container.form-center {
+    background-color: #2a1e16;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid #4a3526;
+}
+
+.container.form-center h1 {
+    text-align: center;
+    color: #f0e6d2;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding-bottom: 15px;
+    border-bottom: 2px solid #8b4513;
+}
+
+.form-center-group {
+    margin-bottom: 22px;
+}
+
+.form-center-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #d4b483;
+    font-weight: 500;
+    font-size: 1.05rem;
+}
+
+.form-center-group input,
+.form-center-group select,
+.form-center-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #5d4037;
+    border-radius: 10px;
+    background-color: #3c2a21;
+    color: #f0e6d2;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-center-group input:focus,
+.form-center-group select:focus,
+.form-center-group textarea:focus {
+    outline: none;
+    border-color: #b8860b;
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2);
+    background-color: #45322a;
+}
+
+.form-center-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-center-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23d4b483' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 45px;
+}
+
+.form-center-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.btn-center {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ЖЁЛТАЯ КНОПКА "ДОБАВИТЬ" */
+.btn-submit-center {
+    background: linear-gradient(to right, #b8860b, #daa520);
+    color: #2a1e16;
+}
+
+.btn-submit-center:hover {
+    background: linear-gradient(to right, #daa520, #ffd700);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+}
+
+/* БОРДОВАЯ КНОПКА "НАЗАД" */
+.btn-back-center {
+    background-color: transparent;
+    color: #d4b483;
+    border: 2px solid #8b4513;
+}
+
+.btn-back-center:hover {
+    background-color: rgba(139, 69, 19, 0.2);
+    border-color: #b8860b;
+    color: #f0e6d2;
+    transform: translateY(-3px);
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 650px) {
+    .container.form-center {
+        padding: 25px;
+    }
+
+    .container.form-center h1 {
+        font-size: 1.8rem;
+    }
+
+    .form-center-buttons {
+        flex-direction: column;
+    }
+
+    .form-center-group input,
+    .form-center-group select,
+    .form-center-group textarea {
+        padding: 12px 14px;
+    }
+}
+
+/* МЕЛОЧИ */
+.form-center-group select option {
+    background-color: #3c2a21;
+    color: #f0e6d2;
+}
+
+.form-center-group input::placeholder,
+.form-center-group textarea::placeholder {
+    color: #a1887f;
+    opacity: 0.7;
+}
+
+/* СКРОЛЛБАР ДЛЯ TEXTAREA */
+.form-center-group textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-center-group textarea::-webkit-scrollbar-track {
+    background: #3c2a21;
+    border-radius: 4px;
+}
+
+.form-center-group textarea::-webkit-scrollbar-thumb {
+    background: #8b4513;
+    border-radius: 4px;
+}
+
+.form-center-group textarea::-webkit-scrollbar-thumb:hover {
+    background: #b8860b;
+}

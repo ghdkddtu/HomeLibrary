@@ -4,31 +4,48 @@
     <meta charset="UTF-8">
     <title>Моя библиотека</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1> Моя библиотека</h1>
+        <div class="header">
+            <h1><i class="fas fa-book-open"></i> Моя книжная коллекция</h1>
+        </div>
 
         {% if books %}
             <div class="books-grid">
                 {% for book in books %}
-                    <div class="book-card">
-                        <div class="book-title">{{ book['title'] }}</div>
-                        <div class="book-author">{{ book['author'] }}</div>
-                        {% if book['category'] %}
-                            <span class="book-category">{{ book['category'] }}</span>
-                        {% endif %}
-                        {% if book['description'] %}
-                            <div class="book-description">{{ book['description'][:100] }}...</div>
-                        {% endif %}
-                    </div>
+                    <a href="{{ url_for('book_detail', book_id=book['id']) }}" class="book-card">
+                        <div class="book-image-container">
+                            {% if book['cover'] %}
+                                <img src="{{ book['cover'] }}" alt="{{ book['title'] }}" class="book-image">
+                            {% else %}
+                                <div class="image-placeholder">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="book-info">
+                            <div class="book-title">{{ book['title'] }}</div>
+                            <div class="book-author">{{ book['author'] }}</div>
+                            {% if book['category'] %}
+                                <span class="book-category">{{ book['category'] }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
         {% else %}
-            <p class="empty-library">Пока нет книг в библиотеке</p>
+            <div class="empty-library">
+                <p><i class="fas fa-book-dead fa-2x"></i></p>
+                <p>Ваша библиотека пока пуста</p>
+                <p>Добавьте первую книгу!</p>
+            </div>
         {% endif %}
 
-        <a href="{{ url_for('add_book') }}" class="add-button">+</a>
+        <a href="{{ url_for('add_book') }}" class="add-button">
+            <i class="fas fa-plus"></i>
+        </a>
     </div>
 </body>
 </html>
