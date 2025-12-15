@@ -98,11 +98,63 @@
     font-size: 1.1rem;
 }
 
+/* Статус чтения */
+.reading-status {
+    background: rgba(61, 48, 40, 0.9);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.reading-status h3 {
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.status-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.status-option {
+    background: var(--medium-brown);
+    border: 2px solid var(--light-brown);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.status-option:hover {
+    border-color: var(--burgundy);
+    transform: translateY(-3px);
+}
+
+.status-option.active {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.2);
+    transform: scale(1.02);
+}
+
+.status-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.status-label {
+    color: var(--cream);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
 /* Кнопки на детальной странице */
 .detail-actions {
     display: flex;
     gap: 20px;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .btn-edit, .btn-delete {
@@ -153,18 +205,129 @@
 .back-link:hover {
     background: var(--gold);
     color: var(--dark-brown);
-
-}
-
-/* Убираем подчёркивание у ссылок-карточек */
-.book-card {
-    text-decoration: none;
-    display: block;
-    color: inherit;
 }
 
 /* Убираем стандартное оформление ссылок */
 a {
     text-decoration: none;
     color: inherit;
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+    .book-detail-card {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .detail-cover {
+        flex: none;
+        width: 100%;
+    }
+
+    .detail-image, .detail-placeholder {
+        height: 300px;
+    }
+
+    .status-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .detail-actions {
+        flex-direction: column;
+    }
+
+    .book-detail-card {
+        padding: 25px;
+    }
+
+    .detail-title {
+        font-size: 2rem;
+    }
+}
+
+/* Выпадающий список для статуса */
+.reading-status-dropdown {
+    background: rgba(61, 48, 40, 0.9);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.reading-status-dropdown h3 {
+    color: var(--gold);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 15px 20px;
+    background: var(--medium-brown);
+    border: 2px solid var(--light-brown);
+    border-radius: 10px;
+    color: var(--cream);
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.dropdown-btn:hover {
+    border-color: var(--burgundy);
+}
+
+.dropdown-btn i {
+    transition: transform 0.3s;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: var(--medium-brown);
+    border: 2px solid var(--light-brown);
+    border-radius: 10px;
+    margin-top: 5px;
+    z-index: 100;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.dropdown-option {
+    padding: 12px 20px;
+    color: var(--cream);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+}
+
+.dropdown-option:hover {
+    background: var(--light-brown);
+}
+
+.dropdown-option:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-option:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.status-icon {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
 }

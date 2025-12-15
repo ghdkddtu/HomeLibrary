@@ -9,14 +9,11 @@
 </head>
 <body>
     <div class="container">
-        <!-- Кнопка назад -->
         <a href="{{ url_for('index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Назад к библиотеке
         </a>
 
-        <!-- Основная информация о книге -->
         <div class="book-detail-card">
-            <!-- Обложка -->
             <div class="detail-cover">
                 {% if book['cover'] %}
                     <img src="{{ book['cover'] }}" alt="{{ book['title'] }}" class="detail-image">
@@ -27,7 +24,7 @@
                 {% endif %}
             </div>
 
-            <!-- Информация -->
+
             <div class="detail-info">
                 <h1 class="detail-title">{{ book.title }}</h1>
                 <h2 class="detail-author">{{ book.author }}</h2>
@@ -54,7 +51,7 @@
                     {% endif %}
                 </div>
 
-                <!-- Описание -->
+
                 {% if book.description %}
                 <div class="detail-description">
                     <h3><i class="fas fa-align-left"></i> Описание:</h3>
@@ -66,6 +63,39 @@
                     <p style="color: #888; font-style: italic;">Описание отсутствует</p>
                 </div>
                 {% endif %}
+
+
+                <div class="reading-status-dropdown">
+                    <h3><i class="fas fa-book-reader"></i> Статус чтения:</h3>
+
+                    <div class="dropdown">
+                        <button class="dropdown-btn" onclick="toggleDropdown()">
+                            <span id="current-status">
+                                {% if book.reading_status == 'reading' %}Читаю
+                                {% elif book.reading_status == 'finished' %}Прочитано
+                                {% elif book.reading_status == 'dropped' %}Брошено
+                                {% else %}Не прочитано
+                                {% endif %}
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+
+                        <div class="dropdown-content" id="status-dropdown">
+                            <div class="dropdown-option" onclick="selectStatus('unread', 'Не прочитано')">
+                                <span>Не читал(а)</span>
+                            </div>
+                            <div class="dropdown-option" onclick="selectStatus('reading', 'Читаю')">
+                                <span>Читаю сейчас</span>
+                            </div>
+                            <div class="dropdown-option" onclick="selectStatus('finished', 'Прочитано')">
+                                <span>Прочитано</span>
+                            </div>
+                            <div class="dropdown-option" onclick="selectStatus('dropped', 'Брошено')">
+                                <span>Брошено</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Кнопки действий -->
                 <div class="detail-actions">
@@ -79,5 +109,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+    let dropdownOpen = false;
+
+    function toggleDropdown() {
+        const dropdown = document.getElementById('status-dropdown');
+        dropdownOpen = !dropdownOpen;
+        dropdown.style.display = dropdownOpen ? 'block' : 'none';
+    }
+
+    function selectStatus(status, label) {
+        document.getElementById('current-status').innerHTML = label;
+
+        document.getElementById('status-dropdown').style.display = 'none';
+        dropdownOpen = false;
+
+        fetch(`/book/{{ book.id }}/update_reading_status`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Статус обновлён:', status);
+            }
+        })
+        .catch(error => console.error('Ошибка:', error));
+    }
+
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('status-dropdown');
+        const btn = document.querySelector('.dropdown-btn');
+
+        if (!btn.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+            dropdownOpen = false;
+        }
+    });
+    </script>
 </body>
 </html>

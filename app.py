@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlite3
 import os
 
@@ -31,6 +31,7 @@ def update_categories():
     conn.close()
     print("Категории обновлены!")
 
+
 @app.route('/')
 def index():
     conn = get_db_connection()
@@ -38,7 +39,6 @@ def index():
     conn.close()
 
     return render_template('index.html', books=books)
-
 
 
 @app.route('/add_book', methods=['GET', 'POST'])
@@ -55,7 +55,7 @@ def add_book():
         conn.execute('''INSERT INTO books 
                        (title, author, category, genre, year, description) 
                        VALUES (?, ?, ?, ?, ?, ?)''',
-                    (title, author, category, genre, year, description))
+                     (title, author, category, genre, year, description))
         conn.commit()
         conn.close()
 
@@ -76,7 +76,6 @@ def book_detail(book_id):
     return render_template('book_detail.html', book=book)
 
 
-
 @app.route('/book/<int:book_id>/edit')
 def edit_book(book_id):
     conn = get_db_connection()
@@ -91,7 +90,7 @@ def edit_book(book_id):
 
 @app.route('/book/<int:book_id>/update', methods=['POST'])
 def update_book(book_id):
-    # Получаем данные из формы
+
     title = request.form['title']
     author = request.form['author']
     category = request.form['category']
@@ -100,7 +99,6 @@ def update_book(book_id):
     cover = request.form.get('cover', '')
     description = request.form.get('description', '')
 
-    # Обновляем книгу в базе данных
     conn = get_db_connection()
 
     try:
@@ -113,7 +111,6 @@ def update_book(book_id):
 
         conn.commit()
         conn.close()
-
 
         return redirect(url_for('book_detail', book_id=book_id))
 
@@ -138,6 +135,24 @@ def delete_book(book_id):
         conn.close()
         return f"Ошибка при удалении: {str(e)}", 500
 
+
+@app.route('/book/<int:book_id>/update_reading_status', methods=['POST'])
+def update_reading_status(book_id):
+    try:
+        data = request.get_json()
+        new_status = data.get('status', 'unread')
+
+        conn = get_db_connection()
+        conn.execute('UPDATE books SET reading_status = ? WHERE id = ?',
+                     (new_status, book_id))
+        conn.commit()
+        conn.close()
+
+        return jsonify({'success': True, 'status': new_status})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 if __name__ == '__main__':
-    #update_categories()
+    # update_categories()
     app.run(debug=True)
