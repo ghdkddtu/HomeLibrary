@@ -37,7 +37,6 @@ def index():
     conn = get_db_connection()
     books = conn.execute('SELECT * FROM books').fetchall()
     conn.close()
-
     return render_template('index.html', books=books)
 
 
@@ -128,7 +127,6 @@ def delete_book(book_id):
         conn.commit()
         conn.close()
 
-        # Возвращаем на главную страницу
         return redirect(url_for('index'))
 
     except Exception as e:

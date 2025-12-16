@@ -12,10 +12,113 @@
             <h1><i class="fas fa-book-open"></i> Моя книжная коллекция</h1>
         </div>
 
+        <div class="filter-button-container">
+            <button class="filter-toggle-btn" onclick="openFilterModal()">
+                <i class="fas fa-filter"></i> Фильтры
+            </button>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Поиск по названию или автору..."
+                       oninput="performSearch()">
+                <button onclick="performSearch()"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div id="filterModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-filter"></i> Фильтры</h2>
+                    <span class="close" onclick="closeFilterModal()">&times;</span>
+                </div>
+
+                <div class="modal-body">
+                    <div class="filter-section">
+                        <h3><i class="fas fa-tags"></i> Категории</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Учёба" onchange="updateFilters()">
+                                Учёба
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Детские" onchange="updateFilters()">
+                                Детские
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Художественные" onchange="updateFilters()">
+                                Художественные
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Психология" onchange="updateFilters()">
+                                Психология
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Познавательные" onchange="updateFilters()">
+                                Познавательные
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Хобби" onchange="updateFilters()">
+                                Хобби
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Манга" onchange="updateFilters()">
+                                Манга
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="Комиксы" onchange="updateFilters()">
+                                Комиксы
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3><i class="fas fa-book-reader"></i> Статус чтения</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="status" value="unread" onchange="updateFilters()">
+                                Не прочитано
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="status" value="reading" onchange="updateFilters()">
+                                Читаю
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="status" value="finished" onchange="updateFilters()">
+                                Прочитано
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="status" value="dropped" onchange="updateFilters()">
+                                Брошено
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3><i class="fas fa-calendar"></i> Год издания</h3>
+                        <div class="range-inputs">
+                            <input type="number" id="yearFrom" placeholder="От" min="1000" oninput="updateFilters()">
+                            <span>—</span>
+                            <input type="number" id="yearTo" placeholder="До" min="1000" oninput="updateFilters()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-clear" onclick="clearFilters()">
+                        <i class="fas fa-broom"></i> Сбросить всё
+                    </button>
+                    <button class="btn-apply" onclick="applyFilters()">
+                        <i class="fas fa-check"></i> Применить
+                    </button>
+                </div>
+            </div>
+        </div>
+
         {% if books %}
             <div class="books-grid">
                 {% for book in books %}
-                    <a href="{{ url_for('book_detail', book_id=book['id']) }}" class="book-card">
+                    <a href="{{ url_for('book_detail', book_id=book['id']) }}" class="book-card"
+                       data-year="{{ book.year or 0 }}"
+                       data-status="{{ book.reading_status or 'unread' }}">
                         <div class="book-image-container">
                             {% if book['cover'] %}
                                 <img src="{{ book['cover'] }}" alt="{{ book['title'] }}" class="book-image">
@@ -39,7 +142,7 @@
             <div class="empty-library">
                 <p><i class="fas fa-book-dead fa-2x"></i></p>
                 <p>Ваша библиотека пока пуста</p>
-                <p>Добавьте первую книгу!</p>
+                <p>Добавьте первую книгу</p>
             </div>
         {% endif %}
 
@@ -47,5 +150,119 @@
             <i class="fas fa-plus"></i>
         </a>
     </div>
+
+    <script>
+    let activeFilters = {
+        categories: [],
+        statuses: [],
+        yearFrom: null,
+        yearTo: null,
+        search: ''
+    };
+
+    function openFilterModal() {
+        document.getElementById('filterModal').style.display = 'block';
+    }
+
+    function closeFilterModal() {
+        document.getElementById('filterModal').style.display = 'none';
+    }
+
+    function applyFilters() {
+        updateFilters();
+        closeFilterModal();
+    }
+
+    function clearFilters() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+        });
+
+        document.getElementById('yearFrom').value = '';
+        document.getElementById('yearTo').value = '';
+
+        document.getElementById('searchInput').value = '';
+
+        activeFilters = {
+            categories: [],
+            statuses: [],
+            yearFrom: null,
+            yearTo: null,
+            search: ''
+        };
+
+        filterBooks();
+        closeFilterModal();
+    }
+
+    function updateFilters() {
+        activeFilters.categories = Array.from(
+            document.querySelectorAll('input[name="category"]:checked')
+        ).map(cb => cb.value);
+
+        activeFilters.statuses = Array.from(
+            document.querySelectorAll('input[name="status"]:checked')
+        ).map(cb => cb.value);
+
+        activeFilters.yearFrom = document.getElementById('yearFrom').value || null;
+        activeFilters.yearTo = document.getElementById('yearTo').value || null;
+
+        filterBooks();
+    }
+
+    function performSearch() {
+        activeFilters.search = document.getElementById('searchInput').value.toLowerCase();
+        filterBooks();
+    }
+
+    function filterBooks() {
+        const books = document.querySelectorAll('.book-card');
+        let visibleCount = 0;
+
+        books.forEach(book => {
+            const title = book.querySelector('.book-title').textContent.toLowerCase();
+            const author = book.querySelector('.book-author').textContent.toLowerCase();
+            const category = book.querySelector('.book-category')?.textContent || '';
+            const year = parseInt(book.dataset.year) || 0;
+            const status = book.dataset.status || 'unread';
+
+            const matchesSearch = !activeFilters.search ||
+                                 title.includes(activeFilters.search) ||
+                                 author.includes(activeFilters.search);
+
+            const matchesCategory = activeFilters.categories.length === 0 ||
+                                   activeFilters.categories.includes(category);
+
+            const matchesStatus = activeFilters.statuses.length === 0 ||
+                                 activeFilters.statuses.includes(status);
+
+            const matchesYear = (!activeFilters.yearFrom || year >= activeFilters.yearFrom) &&
+                               (!activeFilters.yearTo || year <= activeFilters.yearTo);
+
+            if (matchesSearch && matchesCategory && matchesStatus && matchesYear) {
+                book.style.display = 'block';
+                visibleCount++;
+            } else {
+                book.style.display = 'none';
+            }
+        });
+
+        const emptyMsg = document.querySelector('.empty-library');
+        if (emptyMsg) {
+            emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('filterModal');
+        if (event.target === modal) {
+            closeFilterModal();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        filterBooks();
+    });
+    </script>
 </body>
 </html>
